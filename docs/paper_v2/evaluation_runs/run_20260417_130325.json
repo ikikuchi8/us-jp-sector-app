@@ -1,0 +1,82 @@
+{
+  "run_at": "2026-04-17T13:03:25Z",
+  "git_sha": "39ef413be605bf7328a5b6b0e3372b77585edd0f-dirty",
+  "python_version": "3.11.15",
+  "config": {
+    "start_date": "2024-01-04",
+    "end_date": "2026-04-15",
+    "cost_params": {
+      "commission_rate": 0.0,
+      "slippage_rate": 0.0
+    },
+    "signal_types": [
+      "simple_v1",
+      "paper_v1",
+      "paper_v2"
+    ]
+  },
+  "signal_generation": {
+    "simple_v1": {
+      "requested": 557,
+      "succeeded_count": 557,
+      "failed_count": 0,
+      "skipped_count": 0,
+      "saved_rows": 9469,
+      "skip_reasons_summary": {},
+      "elapsed_seconds": 5.631,
+      "error": null
+    },
+    "paper_v1": {
+      "requested": 557,
+      "succeeded_count": 557,
+      "failed_count": 0,
+      "skipped_count": 0,
+      "saved_rows": 9469,
+      "skip_reasons_summary": {},
+      "elapsed_seconds": 62.261,
+      "error": null
+    },
+    "paper_v2": {
+      "requested": 557,
+      "succeeded_count": 557,
+      "failed_count": 0,
+      "skipped_count": 0,
+      "saved_rows": 9469,
+      "skip_reasons_summary": {},
+      "elapsed_seconds": 56.14,
+      "error": null
+    }
+  },
+  "backtest": {
+    "simple_v1": {
+      "run_id": 54,
+      "status": "SUCCEEDED",
+      "daily_results_count": 557,
+      "executed_days": 556,
+      "elapsed_seconds": 2.512,
+      "error": null
+    },
+    "paper_v1": {
+      "run_id": 55,
+      "status": "SUCCEEDED",
+      "daily_results_count": 557,
+      "executed_days": 556,
+      "elapsed_seconds": 2.609,
+      "error": null
+    },
+    "paper_v2": {
+      "run_id": 56,
+      "status": "SUCCEEDED",
+      "daily_results_count": 557,
+      "executed_days": 556,
+      "elapsed_seconds": 2.729,
+      "error": null
+    }
+  },
+  "db_snapshot": {
+    "price_db_row_count": 36438,
+    "price_db_last_date": "2026-04-17",
+    "latest_common_date_28_tickers": "2026-04-16"
+  },
+  "c0_version": "v1"
+}
