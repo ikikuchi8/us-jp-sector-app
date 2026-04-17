@@ -2,8 +2,32 @@
 
 import { useState } from "react";
 import { generateSignals } from "@/lib/api/signals";
-import type { SignalType } from "@/lib/types/signals";
+import type { SignalType, SignalsGenerateResponse } from "@/lib/types/signals";
 import { SIGNAL_TYPE_LABELS } from "@/lib/types/signals";
+
+function buildToastMessage(
+  result: SignalsGenerateResponse,
+  signalType: SignalType
+): string {
+  if (result.has_failure) {
+    return `生成完了 (失敗 ${Object.keys(result.failed).length}件 / ${result.requested}日)`;
+  }
+  const reasons = Object.entries(result.skip_reasons_summary);
+  if (reasons.length > 0) {
+    const reasonStr = reasons
+      .map(([reason, count]) => `${reason}=${count}`)
+      .join(", ");
+    return `${signalType} 生成完了: ${result.succeeded.length}日保存 / ${result.skipped.length}日スキップ\nskip: ${reasonStr}`;
+  }
+  const allSkipped =
+    result.saved_rows === 0 &&
+    result.skipped.length > 0 &&
+    result.skipped.length === result.requested;
+  if (allSkipped) {
+    return `生成完了 (0行保存 / ${result.requested}日 — 全日スキップ。価格履歴が不足している可能性があります)`;
+  }
+  return `生成完了 (${result.saved_rows}行保存 / ${result.requested}日)`;
+}
 
 interface GenerateSignalsFormProps {
   signalType: SignalType;
@@ -40,22 +64,13 @@ export function GenerateSignalsForm({
         end_date: end,
         signal_type: signalType,
       });
-      const allSkipped =
-        result.saved_rows === 0 &&
-        result.skipped.length > 0 &&
-        result.skipped.length === result.requested;
-      const msg = result.has_failure
-        ? `生成完了 (失敗 ${Object.keys(result.failed).length}件 / ${result.requested}日)`
-        : allSkipped
-        ? `生成完了 (0行保存 / ${result.requested}日 — 全日スキップ。価格履歴が不足している可能性があります)`
-        : `生成完了 (${result.saved_rows}行保存 / ${result.requested}日)`;
-      setToast(msg);
+      setToast(buildToastMessage(result, signalType));
       onSuccess?.();
     } catch (e: unknown) {
       setToast(e instanceof Error ? e.message : "生成に失敗しました");
     } finally {
       setLoading(false);
-      setTimeout(() => setToast(null), 4000);
+      setTimeout(() => setToast(null), 6000);
     }
   }
 
@@ -106,7 +121,7 @@ export function GenerateSignalsForm({
         </button>
         {toast && (
           <div className="absolute top-full mt-1 left-0 z-20 bg-gray-800 text-white text-xs
-                          px-3 py-1.5 rounded shadow-lg whitespace-nowrap">
+                          px-3 py-1.5 rounded shadow-lg whitespace-pre-line max-w-md">
             {toast}
           </div>
         )}

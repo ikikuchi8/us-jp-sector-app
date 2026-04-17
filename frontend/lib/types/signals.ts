@@ -38,4 +38,8 @@ export interface SignalsGenerateResponse {
   failed: Record<string, string>;
   skipped: string[];
   has_failure: boolean;
+  /** paper_v2 の skip 理由別件数。simple_v1 / paper_v1 では `{}`。 */
+  skip_reasons_summary: Record<string, number>;
+  /** 日付 → skip 理由のマップ。UI 初版では未使用、診断用に保持。 */
+  skip_reasons_detail: Record<string, string>;
 }
