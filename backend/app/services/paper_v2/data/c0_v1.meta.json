@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0",
+  "artifact_version": "v1",
+  "c_full_train_start": "2021-01-12",
+  "c_full_train_end": "2023-12-31",
+  "paper_v2_oos_start": "2024-01-04",
+  "universe_size": 28,
+  "K0": 3,
+  "us_tickers": [
+    "XLB",
+    "XLC",
+    "XLE",
+    "XLF",
+    "XLI",
+    "XLK",
+    "XLP",
+    "XLRE",
+    "XLU",
+    "XLV",
+    "XLY"
+  ],
+  "jp_tickers": [
+    "1617.T",
+    "1618.T",
+    "1619.T",
+    "1620.T",
+    "1621.T",
+    "1622.T",
+    "1623.T",
+    "1624.T",
+    "1625.T",
+    "1626.T",
+    "1627.T",
+    "1628.T",
+    "1629.T",
+    "1630.T",
+    "1631.T",
+    "1632.T",
+    "1633.T"
+  ],
+  "cyclical_us": [
+    "XLB",
+    "XLE",
+    "XLF",
+    "XLRE"
+  ],
+  "defensive_us": [
+    "XLK",
+    "XLP",
+    "XLU",
+    "XLV"
+  ],
+  "cyclical_jp": [
+    "1618.T",
+    "1625.T",
+    "1629.T",
+    "1631.T"
+  ],
+  "defensive_jp": [
+    "1617.T",
+    "1621.T",
+    "1627.T",
+    "1630.T"
+  ],
+  "expected_c_full_rows": 729,
+  "actual_c_full_rows": 729,
+  "top3_eigenvalues_of_c_full": [
+    12.208102552202995,
+    4.305965111835741,
+    1.745399812780098
+  ],
+  "built_at": "2026-04-17T08:34:08Z",
+  "built_from_git_sha": "415c4d15d178d586e66fa2f75870064349845e51",
+  "sha256_of_c0_npz": "fc73e54f4fceb42830494205c553bca06138f847a96a0dd64f3a65cfcb1872c4"
+}
