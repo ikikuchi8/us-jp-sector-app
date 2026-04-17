@@ -1,0 +1,220 @@
+{
+  "report_at": "2026-04-17T19:59:12Z",
+  "report_git_sha": "be19d2cfb7246849a6612ad925697a573dcb1edb-dirty",
+  "input_run_json": "/Users/kikuchiisamu/Projects/us-jp-sector-app/docs/paper_v2/evaluation_runs/run_20260417_130325.json",
+  "evaluation_run": {
+    "run_at": "2026-04-17T13:03:25Z",
+    "git_sha": "39ef413be605bf7328a5b6b0e3372b77585edd0f-dirty",
+    "python_version": "3.11.15",
+    "config": {
+      "start_date": "2024-01-04",
+      "end_date": "2026-04-15",
+      "cost_params": {
+        "commission_rate": 0.0,
+        "slippage_rate": 0.0
+      },
+      "signal_types": [
+        "simple_v1",
+        "paper_v1",
+        "paper_v2"
+      ]
+    },
+    "signal_generation": {
+      "simple_v1": {
+        "requested": 557,
+        "succeeded_count": 557,
+        "failed_count": 0,
+        "skipped_count": 0,
+        "saved_rows": 9469,
+        "skip_reasons_summary": {},
+        "elapsed_seconds": 5.631,
+        "error": null
+      },
+      "paper_v1": {
+        "requested": 557,
+        "succeeded_count": 557,
+        "failed_count": 0,
+        "skipped_count": 0,
+        "saved_rows": 9469,
+        "skip_reasons_summary": {},
+        "elapsed_seconds": 62.261,
+        "error": null
+      },
+      "paper_v2": {
+        "requested": 557,
+        "succeeded_count": 557,
+        "failed_count": 0,
+        "skipped_count": 0,
+        "saved_rows": 9469,
+        "skip_reasons_summary": {},
+        "elapsed_seconds": 56.14,
+        "error": null
+      }
+    },
+    "backtest": {
+      "simple_v1": {
+        "run_id": 54,
+        "status": "SUCCEEDED",
+        "daily_results_count": 557,
+        "executed_days": 556,
+        "elapsed_seconds": 2.512,
+        "error": null
+      },
+      "paper_v1": {
+        "run_id": 55,
+        "status": "SUCCEEDED",
+        "daily_results_count": 557,
+        "executed_days": 556,
+        "elapsed_seconds": 2.609,
+        "error": null
+      },
+      "paper_v2": {
+        "run_id": 56,
+        "status": "SUCCEEDED",
+        "daily_results_count": 557,
+        "executed_days": 556,
+        "elapsed_seconds": 2.729,
+        "error": null
+      }
+    },
+    "db_snapshot": {
+      "price_db_row_count": 36438,
+      "price_db_last_date": "2026-04-17",
+      "latest_common_date_28_tickers": "2026-04-16"
+    },
+    "c0_version": "v1"
+  },
+  "view_a": {
+    "simple_v1": {
+      "AR": 0.31649435547576316,
+      "RISK": 0.06903658731848274,
+      "R_R": 4.584443811159103,
+      "MDD": -0.04225500000000004,
+      "W_last": 2.001391963703825,
+      "alignment_days": 557,
+      "executed_days": 556,
+      "skipped_days": 1,
+      "skip_rate": 0.0017953321364452424
+    },
+    "paper_v1": {
+      "AR": 0.10945396050269297,
+      "RISK": 0.055477222630143506,
+      "R_R": 1.9729531384871681,
+      "MDD": -0.03352583443450774,
+      "W_last": 1.269322738149878,
+      "alignment_days": 557,
+      "executed_days": 556,
+      "skipped_days": 1,
+      "skip_rate": 0.0017953321364452424
+    },
+    "paper_v2": {
+      "AR": 0.030098843806104187,
+      "RISK": 0.06288098834173343,
+      "R_R": 0.4786636565336539,
+      "MDD": -0.09716846185371664,
+      "W_last": 1.06413822145793,
+      "alignment_days": 557,
+      "executed_days": 556,
+      "skipped_days": 1,
+      "skip_rate": 0.0017953321364452424
+    }
+  },
+  "view_b": {
+    "3way": {
+      "days": 556,
+      "simple_v1": {
+        "AR": 0.3170635899280577,
+        "RISK": 0.06909356244876483,
+        "R_R": 4.588902043705894,
+        "MDD": -0.04225500000000004,
+        "W_last": 2.001391963703825
+      },
+      "paper_v1": {
+        "AR": 0.10965082014388487,
+        "RISK": 0.05552640690569012,
+        "R_R": 1.9747508663782871,
+        "MDD": -0.03352583443450774,
+        "W_last": 1.269322738149878
+      },
+      "paper_v2": {
+        "AR": 0.030152978417266246,
+        "RISK": 0.06293756083382522,
+        "R_R": 0.4790935336194472,
+        "MDD": -0.09716846185371664,
+        "W_last": 1.06413822145793
+      }
+    },
+    "simple_v1_paper_v1": {
+      "days": 556,
+      "simple_v1": {
+        "AR": 0.3170635899280577,
+        "RISK": 0.06909356244876483,
+        "R_R": 4.588902043705894,
+        "MDD": -0.04225500000000004,
+        "W_last": 2.001391963703825
+      },
+      "paper_v1": {
+        "AR": 0.10965082014388487,
+        "RISK": 0.05552640690569012,
+        "R_R": 1.9747508663782871,
+        "MDD": -0.03352583443450774,
+        "W_last": 1.269322738149878
+      },
+      "paper_v2": {
+        "AR": 0.030152978417266246,
+        "RISK": 0.06293756083382522,
+        "R_R": 0.4790935336194472,
+        "MDD": -0.09716846185371664,
+        "W_last": 1.06413822145793
+      }
+    },
+    "simple_v1_paper_v2": {
+      "days": 556,
+      "simple_v1": {
+        "AR": 0.3170635899280577,
+        "RISK": 0.06909356244876483,
+        "R_R": 4.588902043705894,
+        "MDD": -0.04225500000000004,
+        "W_last": 2.001391963703825
+      },
+      "paper_v1": {
+        "AR": 0.10965082014388487,
+        "RISK": 0.05552640690569012,
+        "R_R": 1.9747508663782871,
+        "MDD": -0.03352583443450774,
+        "W_last": 1.269322738149878
+      },
+      "paper_v2": {
+        "AR": 0.030152978417266246,
+        "RISK": 0.06293756083382522,
+        "R_R": 0.4790935336194472,
+        "MDD": -0.09716846185371664,
+        "W_last": 1.06413822145793
+      }
+    },
+    "paper_v1_paper_v2": {
+      "days": 556,
+      "simple_v1": {
+        "AR": 0.3170635899280577,
+        "RISK": 0.06909356244876483,
+        "R_R": 4.588902043705894,
+        "MDD": -0.04225500000000004,
+        "W_last": 2.001391963703825
+      },
+      "paper_v1": {
+        "AR": 0.10965082014388487,
+        "RISK": 0.05552640690569012,
+        "R_R": 1.9747508663782871,
+        "MDD": -0.03352583443450774,
+        "W_last": 1.269322738149878
+      },
+      "paper_v2": {
+        "AR": 0.030152978417266246,
+        "RISK": 0.06293756083382522,
+        "R_R": 0.4790935336194472,
+        "MDD": -0.09716846185371664,
+        "W_last": 1.06413822145793
+      }
+    }
+  }
+}
