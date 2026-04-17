@@ -39,7 +39,7 @@ class BacktestRunRequest(BaseModel):
 
     start_date: date
     end_date: date
-    signal_type: Literal["simple_v1", "paper_v1"] = "simple_v1"
+    signal_type: Literal["simple_v1", "paper_v1", "paper_v2"] = "simple_v1"
     commission_rate: float = 0.0
     slippage_rate: float = 0.0
     run_name: str | None = None

@@ -13,7 +13,7 @@ from datetime import date
 from decimal import Decimal
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, model_validator
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
 class SignalsGenerateRequest(BaseModel):
@@ -22,7 +22,8 @@ class SignalsGenerateRequest(BaseModel):
     Attributes:
         start_date:  jp_execution_date の開始日 (inclusive)。
         end_date:    jp_execution_date の終了日 (inclusive)。
-        signal_type: シグナル種別。"simple_v1" または "paper_v1"。デフォルト "simple_v1"。
+        signal_type: シグナル種別。"simple_v1", "paper_v1", または "paper_v2"。
+                     デフォルト "simple_v1"。
 
     Raises:
         ValidationError (422): start_date > end_date の場合、または不正な signal_type の場合。
@@ -30,7 +31,7 @@ class SignalsGenerateRequest(BaseModel):
 
     start_date: date
     end_date: date
-    signal_type: Literal["simple_v1", "paper_v1"] = "simple_v1"
+    signal_type: Literal["simple_v1", "paper_v1", "paper_v2"] = "simple_v1"
 
     @model_validator(mode="after")
     def validate_date_range(self) -> "SignalsGenerateRequest":
@@ -46,14 +47,17 @@ class SignalsGenerateResponse(BaseModel):
     """POST /signals/generate レスポンス。
 
     SignalGenerationResult の各フィールドをそのまま公開する。
+    paper_v2 の場合のみ skip_reasons_summary / skip_reasons_detail が埋まる。
 
     Attributes:
-        requested:   処理対象の jp_execution_date 数。
-        saved_rows:  DB に保存した行数。
-        succeeded:   正常完了した jp_execution_date のリスト。
-        failed:      失敗した jp_execution_date → エラーメッセージ の dict。
-        skipped:     US 価格が全欠損でスキップした jp_execution_date のリスト。
-        has_failure: failed が 1 件以上あれば True。
+        requested:             処理対象の jp_execution_date 数。
+        saved_rows:            DB に保存した行数。
+        succeeded:             正常完了した jp_execution_date のリスト。
+        failed:                失敗した jp_execution_date → エラーメッセージ の dict。
+        skipped:               US 価格が全欠損でスキップした jp_execution_date のリスト。
+        has_failure:           failed が 1 件以上あれば True。
+        skip_reasons_summary:  理由ごとの件数集計 (paper_v2 のみ、それ以外は {})。
+        skip_reasons_detail:   日付 → 理由のマップ (paper_v2 のみ、それ以外は {})。
     """
 
     requested: int
@@ -62,6 +66,8 @@ class SignalsGenerateResponse(BaseModel):
     failed: dict[str, str]
     skipped: list[date]
     has_failure: bool
+    skip_reasons_summary: dict[str, int] = Field(default_factory=dict)
+    skip_reasons_detail: dict[str, str] = Field(default_factory=dict)
 
 
 class SignalRow(BaseModel):

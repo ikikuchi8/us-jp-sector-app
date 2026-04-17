@@ -26,6 +26,8 @@ from app.services.paper_v1_signal_service import (
     SIGNAL_TYPE_PAPER_V1,
     PaperV1SignalService,
 )
+from app.services.paper_v2.constants import SIGNAL_TYPE_PAPER_V2
+from app.services.paper_v2.signal_service import PaperV2SignalService
 from app.services.signal_service import SIGNAL_TYPE_SIMPLE_V1, SignalService
 
 router = APIRouter()
@@ -47,7 +49,7 @@ def generate_signals(
     Args:
         body.start_date:  jp_execution_date の開始日 (inclusive)
         body.end_date:    jp_execution_date の終了日 (inclusive)
-        body.signal_type: シグナル種別 ("simple_v1" または "paper_v1")
+        body.signal_type: シグナル種別 ("simple_v1", "paper_v1", または "paper_v2")
 
     Returns:
         SignalsGenerateResponse — 処理件数・成功・失敗・スキップの各リスト
@@ -55,11 +57,22 @@ def generate_signals(
     Raises:
         422: start_date > end_date または不正な signal_type (Pydantic バリデーション)
     """
+    skip_reasons_summary: dict[str, int] = {}
+    skip_reasons_detail: dict[str, str] = {}
+
     if body.signal_type == SIGNAL_TYPE_PAPER_V1:
-        svc: SignalService | PaperV1SignalService = PaperV1SignalService(db, calendar)
+        svc: SignalService | PaperV1SignalService | PaperV2SignalService = PaperV1SignalService(db, calendar)
+        result = svc.generate_signals_for_range(body.start_date, body.end_date)
+    elif body.signal_type == SIGNAL_TYPE_PAPER_V2:
+        svc = PaperV2SignalService(db, calendar)
+        result = svc.generate_signals_for_range(body.start_date, body.end_date)
+        # result は PaperV2GenerationResult で skip_reasons フィールドを持つ
+        for d, reason in result.skip_reasons.items():
+            skip_reasons_detail[str(d)] = reason
+            skip_reasons_summary[reason] = skip_reasons_summary.get(reason, 0) + 1
     else:
         svc = SignalService(db, calendar, signal_type=body.signal_type)
-    result = svc.generate_signals_for_range(body.start_date, body.end_date)
+        result = svc.generate_signals_for_range(body.start_date, body.end_date)
 
     return SignalsGenerateResponse(
         requested=result.requested,
@@ -68,6 +81,8 @@ def generate_signals(
         failed={str(k): v for k, v in result.failed.items()},
         skipped=result.skipped,
         has_failure=result.has_failure,
+        skip_reasons_summary=skip_reasons_summary,
+        skip_reasons_detail=skip_reasons_detail,
     )
 
 
