@@ -84,6 +84,11 @@ def load_c0_artifact(
       9. C_0.shape == (28, 28), 対称 (atol 1e-10), diag ≈ 1 (atol 1e-8)
      10. V_0.shape == (28, 3), V_0.T @ V_0 ≈ I_3 (atol 1e-8)
      11. np.isfinite(C_0).all(), np.isfinite(V_0).all()
+     12. npz キーセット == {"C_0", "V_0", "D_0", "C_full", "us_tickers", "jp_tickers"} (完全一致)
+     13. npz["us_tickers"] 配列 == expected_us_tickers (完全一致)
+     14. npz["jp_tickers"] 配列 == expected_jp_tickers (完全一致)
+     15. npz["us_tickers"] 配列 == meta["us_tickers"] (npz と meta の一致)
+     16. npz["jp_tickers"] 配列 == meta["jp_tickers"] (npz と meta の一致)
 
     Raises:
         RuntimeError: いずれかのチェック失敗。メッセージに失敗項目を明示。
@@ -163,6 +168,16 @@ def load_c0_artifact(
     except Exception as exc:
         raise RuntimeError(f"[npz load] npz のロードに失敗しました: {exc}") from exc
 
+    # ── check 12: npz キーセットの厳密検証 ──
+    EXPECTED_NPZ_KEYS = {"C_0", "V_0", "D_0", "C_full", "us_tickers", "jp_tickers"}
+    actual_keys = set(npz.files)
+    if actual_keys != EXPECTED_NPZ_KEYS:
+        raise RuntimeError(
+            f"[check 12] npz keys mismatch: "
+            f"missing={EXPECTED_NPZ_KEYS - actual_keys}, "
+            f"unexpected={actual_keys - EXPECTED_NPZ_KEYS}"
+        )
+
     # npz 内の配列キーを大文字/小文字の両方に対応する
     _KEY_MAP = {
         "c0": ("c0", "C_0"),
@@ -222,6 +237,30 @@ def load_c0_artifact(
         raise RuntimeError("[check 11] C_0 に NaN または Inf が含まれています。")
     if not np.isfinite(v0).all():
         raise RuntimeError("[check 11] V_0 に NaN または Inf が含まれています。")
+
+    # ── check 13-16: npz 内 ticker 配列の厳密検証 ──
+    npz_us_tickers = tuple(str(t) for t in npz["us_tickers"])
+    npz_jp_tickers = tuple(str(t) for t in npz["jp_tickers"])
+
+    if npz_us_tickers != tuple(expected_us_tickers):
+        raise RuntimeError(
+            f"[check 13] npz us_tickers mismatch with expected: "
+            f"npz={npz_us_tickers}, expected={tuple(expected_us_tickers)}"
+        )
+    if npz_jp_tickers != tuple(expected_jp_tickers):
+        raise RuntimeError(
+            f"[check 14] npz jp_tickers mismatch with expected: "
+            f"npz={npz_jp_tickers}, expected={tuple(expected_jp_tickers)}"
+        )
+    # npz と meta の一致確認 (冗長だが tamper 検出強化)
+    if npz_us_tickers != tuple(meta["us_tickers"]):
+        raise RuntimeError(
+            "[check 15] npz us_tickers differ from meta us_tickers"
+        )
+    if npz_jp_tickers != tuple(meta["jp_tickers"]):
+        raise RuntimeError(
+            "[check 16] npz jp_tickers differ from meta jp_tickers"
+        )
 
     us_tickers = tuple(meta["us_tickers"])
     jp_tickers = tuple(meta["jp_tickers"])

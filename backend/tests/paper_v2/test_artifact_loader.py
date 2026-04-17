@@ -215,6 +215,50 @@ class TestUniverseSizeMismatch:
             )
 
 
+class TestNpzKeyChecks:
+    def test_npz_missing_key_raises(self, tmp_path: Path) -> None:
+        """npz に必須キー "D_0" がない場合、RuntimeError (check 12)。"""
+        real_npz = np.load(C0_ARTIFACT_PATH, allow_pickle=False)
+        # D_0 を除いた配列で tmp npz を作成
+        arrays = {k: real_npz[k] for k in real_npz.files if k != "D_0"}
+        npz_path = tmp_path / "c0_no_d0.npz"
+        np.savez(npz_path, **arrays)
+        sha256 = _sha256_of_file(npz_path)
+        meta_path = _make_tmp_meta(tmp_path, sha256_of_c0_npz=sha256)
+
+        with pytest.raises(RuntimeError, match="check 12"):
+            load_c0_artifact(
+                npz_path=npz_path,
+                meta_path=meta_path,
+                expected_us_tickers=_EXPECTED_US_TICKERS,
+                expected_jp_tickers=_EXPECTED_JP_TICKERS,
+            )
+
+    def test_npz_ticker_array_tampered_raises(self, tmp_path: Path) -> None:
+        """npz 内 us_tickers 配列を改変した場合、RuntimeError (check 13)。
+        SHA-256 は npz に合わせて更新するが、expected_us_tickers とは不一致。
+        """
+        real_npz = np.load(C0_ARTIFACT_PATH, allow_pickle=False)
+        arrays = {k: real_npz[k] for k in real_npz.files}
+        # us_tickers 配列を改ざん (最初の要素を "TAMPERED" に変更)
+        original_us = list(str(t) for t in real_npz["us_tickers"])
+        tampered_us = ["TAMPERED"] + original_us[1:]
+        arrays["us_tickers"] = np.array(tampered_us)
+        npz_path = tmp_path / "c0_tampered.npz"
+        np.savez(npz_path, **arrays)
+        # SHA-256 を tampered npz に合わせて更新 → check 3 はパス
+        sha256 = _sha256_of_file(npz_path)
+        meta_path = _make_tmp_meta(tmp_path, sha256_of_c0_npz=sha256)
+
+        with pytest.raises(RuntimeError, match="check 13"):
+            load_c0_artifact(
+                npz_path=npz_path,
+                meta_path=meta_path,
+                expected_us_tickers=_EXPECTED_US_TICKERS,
+                expected_jp_tickers=_EXPECTED_JP_TICKERS,
+            )
+
+
 class TestArrayChecks:
     def test_c0_non_symmetric_raises(self, tmp_path: Path) -> None:
         """tmp npz で C_0 を非対称に書き換えると RuntimeError (check 9)。"""
