@@ -1,12 +1,13 @@
 // backend: app/schemas/signal.py に対応する TypeScript 型定義
 
-/** 有効なシグナル種別。backend の Literal["simple_v1", "paper_v1"] に対応。 */
-export type SignalType = "simple_v1" | "paper_v1";
+/** 有効なシグナル種別。backend の Literal["simple_v1", "paper_v1", "paper_v2"] に対応。 */
+export type SignalType = "simple_v1" | "paper_v1" | "paper_v2";
 
 /** SignalType の表示ラベル。UI の select / badge で使用する。 */
 export const SIGNAL_TYPE_LABELS: Record<SignalType, string> = {
   simple_v1: "simple_v1",
   paper_v1: "paper_v1 (PCA+Ridge)",
+  paper_v2: "論文版 v2-lite (2024-01-04〜)",
 };
 
 export interface SignalRow {
